@@ -644,14 +644,16 @@ Run the full quality gate pass across all chunks in sequence, then produce the f
 
 ### Step 4 — Output Format
 
-**Word document (.docx):** generate a Python script using `python-docx`:
+**Default (web and local):** output the assembled Italian text as plain markdown — ready to copy-paste into any word processor.
+
+**Word document (.docx) — local Claude Code only:** if the user specifies `--docx <path>`, generate a Python script using `python-docx`:
 - Calibri 11pt Normal style
 - Heading level 1 (navy `#1F497D`), heading level 2 (blue `#2E74B5`)
 - Justifies all body paragraphs
 - Tables with `'Table Grid'` style
 - Output to user-specified path
 
-**Plain text:** output raw Italian markdown.
+On claude.ai (web), always output plain markdown regardless of flags — `.docx` generation requires local Python.
 
 ---
 
@@ -703,22 +705,32 @@ Before delivering output, verify:
 
 ## Usage
 
+### Claude Code (CLI / Desktop app)
+
 ```
 /italian-rewriting
-```
-
-Then paste or attach the source material. Optionally specify:
-- Output format: `--docx <path>` or `--markdown` (default)
-- Target section: `--section "4.1"` to rewrite only a specific section
-- Register: `--registro accademico` (default) · `--registro saggistico` · `--registro conversazionale`
-
-### Example invocation
-
-```
-/italian-rewriting --docx "C:/Users/.../output.docx"
 
 [paste PDF extract or raw text below]
 ```
+
+Optional flags:
+- `--docx <path>` — generate a python-docx script for Word output (local only)
+- `--section "4.1"` — rewrite only a specific section
+- `--registro accademico` (default) · `--registro saggistico` · `--registro conversazionale`
+
+### claude.ai (web) — no installation needed
+
+1. Open this file (`italian-rewriting.md`) in any text editor
+2. Select all and copy the entire content
+3. Start a new conversation on claude.ai
+4. Paste the file content as your first message, then add:
+   ```
+   Applica queste regole al testo che segue:
+
+   [paste your source text here]
+   ```
+5. The interactive chunking loop works identically — reply `Next` between chunks and `Assemble` after the last one
+6. Output will always be plain markdown on web; copy-paste into Word manually
 
 ---
 
@@ -729,4 +741,4 @@ Then paste or attach the source material. Optionally specify:
 - Natural Italian paragraph structure throughout
 - All factual anchors (citations, statistics, legal references, proper nouns) preserved verbatim
 - All 27 quality gates applied across Layers 1–4
-- Output as `.docx` (via `python-docx` script) or plain markdown, at user's choice
+- Output as plain markdown (default, works on web and local) or `.docx` via python-docx script (local Claude Code only)
