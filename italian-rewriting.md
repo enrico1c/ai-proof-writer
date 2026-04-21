@@ -648,7 +648,7 @@ Triggered only when the user types **Assemble** (after the last chunk is confirm
 
 Run the full quality gate pass across all chunks in sequence, then produce the final continuous output:
 
-- [ ] Zero em-dashes remaining
+- [ ] **[BLOCKING]** Zero em-dashes `—`: if any found, do not produce output — fix first
 - [ ] Zero blacklisted words
 - [ ] No forbidden sentence openers
 - [ ] No initial gerunds, no Title Case
@@ -681,7 +681,7 @@ Before delivering output, verify:
 
 **Layer 1 — Core AI Fingerprints**
 1. **Factual accuracy** — spot-check 5 random facts against source
-2. **Em-dash count** — must be zero
+2. **[BLOCKING] Em-dash count** — must be zero; if any `—` found, stop and fix before outputting
 3. **Blacklist scan** — zero occurrences of: cruciale, fondamentale, sfaccettato, resiliente, intrinseco, vibrante, esplorare, immergersi, svelare, plasmare, tessere
 4. **Forbidden openers** — no sentence starting with: Tuttavia / Inoltre / Peraltro / Pertanto / Di conseguenza / In conclusione / In sintesi / Detto ciò / In ultima analisi
 5. **Organic burstiness** — sentence length varies by rhetorical function, NOT by mechanical alternation; zero long-short-long-short loops; 2–4 consecutive similar-length sentences allowed when logic demands it; verify each short sentence has a functional reason (emphasis/conclusion/fact)
