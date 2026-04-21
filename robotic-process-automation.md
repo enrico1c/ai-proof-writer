@@ -284,17 +284,35 @@ function getSyntacticPause(char) {
   return 0;
 }
 
-// ── Level 1 — Insert character into Google Docs ───────────────────────────────
+// ── Level 1 — Find Google Docs editor and insert character ────────────────────
+// Google Docs renders its editor inside a hidden iframe. execCommand must be
+// called on that iframe's document, not on the outer page document.
+function getEditorDoc() {
+  const iframe = document.querySelector('.docs-texteventtarget-iframe');
+  if (iframe && iframe.contentDocument) return iframe.contentDocument;
+  return document; // fallback for other contenteditable targets
+}
+
 function insertChar(char) {
+  const doc = getEditorDoc();
   if (char === '\n') {
-    document.execCommand('insertParagraph');
+    doc.execCommand('insertParagraph');
   } else {
-    document.execCommand('insertText', false, char);
+    doc.execCommand('insertText', false, char);
   }
+}
+
+function deleteChar() {
+  getEditorDoc().execCommand('delete');
 }
 
 // ── Main ──────────────────────────────────────────────────────────────────────
 async function main() {
+  const iframe = document.querySelector('.docs-texteventtarget-iframe');
+  if (!iframe) {
+    console.warn('[WARNING] Google Docs iframe not found. Make sure this page is an open Google Docs document.');
+  }
+
   console.log('════════════════════════════════════════════════════');
   console.log('  ai-proof-writer — Web Typing Simulator');
   console.log('════════════════════════════════════════════════════');
@@ -328,7 +346,7 @@ async function main() {
       const wrong = COMMON_MISTYPE[Math.floor(Math.random() * COMMON_MISTYPE.length)];
       insertChar(wrong);
       await sleep(300 + Math.random() * 300);   // reaction time
-      document.execCommand('delete');
+      deleteChar();
       await sleep(100 + Math.random() * 200);   // correction pause
     }
 

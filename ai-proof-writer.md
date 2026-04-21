@@ -10,7 +10,7 @@ Two-phase orchestration of `italian-rewriting` and `robotic-process-automation`.
 
 **Input:** any raw text (Italian or source language)
 **Output Phase 1:** rewritten Italian prose — undetectable by GPTZero, Originality, ZeroGPT, human editors
-**Output Phase 2:** a ready-to-run Python script that types the rewritten text with forensic-level human keystroke metadata
+**Output Phase 2:** a typing script — Python (`pynput`) for local use, or JavaScript (browser console) for web use
 
 ---
 
@@ -28,23 +28,16 @@ Do **not** use when:
 
 ---
 
-## Setup (first run only)
+## Step 0 — Environment Detection (mandatory, runs before anything else)
 
-Before first use, the user must run:
+Before starting Phase 1, output exactly this and wait for the user's reply:
 
-```bash
-python setup.py
-```
+> "Are you running this on **Claude Code** (local — has Python installed) or **claude.ai web**? Reply `local` or `web`."
 
-This script (included in the `ai-proof-writer` GitHub repo) will:
-1. Verify Python ≥ 3.10
-2. Install `pynput` automatically
-3. Guide through platform-specific keyboard access permissions:
-   - **macOS:** Accessibility permission in System Settings
-   - **Linux:** `/dev/input` group or X11 access
-   - **Windows:** no special permissions required
-4. Run a functional smoke-test of the keyboard controller
-5. Print step-by-step usage instructions
+Store the answer as **MODE**. Do not begin chunking until MODE is confirmed.
+
+- **MODE = local** → Phase 2 will generate a Python script (`pynput`). Instruct the user to run `python setup.py` from the GitHub repo before first use (installs pynput, checks platform permissions).
+- **MODE = web** → Phase 2 will generate a JavaScript browser console script. No installation needed.
 
 ---
 
