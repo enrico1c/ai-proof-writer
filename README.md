@@ -1,4 +1,4 @@
-# ai-proof-writer
+# ai-proof-writer-for-italian-text
 
 A two-phase pipeline that rewrites text into undetectable Italian prose and then types it into a word processor with forensic-level human keystroke simulation.
 
