@@ -453,10 +453,10 @@ AI builds arguments perfectly linearly: premise → evidence → conclusion, alw
 **Rules:**
 
 **Conclusion-first structure** (at least once per section): Present the conclusion before its supporting evidence. Human writers do this constantly; AI almost never does because it requires resolving uncertainty before it has been computed.
-> «Il meccanismo è destinato a fallire. L'evidenza empirica — raccolta su tre cicli regolatori — non lascia spazio a interpretazioni alternative.»
+> «Il meccanismo è destinato a fallire. L'evidenza empirica, raccolta su tre cicli regolatori, non lascia spazio a interpretazioni alternative.»
 
 **Acknowledged tangent** (at least once per document): Include one brief aside that is related but not strictly necessary, explicitly flagged as such and then set aside.
-> «Si potrebbe aprire qui una riflessione sul ruolo della discrezionalità amministrativa — questione che meriterebbe trattazione separata — ma ai fini della presente analisi è sufficiente osservare che…»
+> «Si potrebbe aprire qui una riflessione sul ruolo della discrezionalità amministrativa, questione che meriterebbe trattazione separata, ma ai fini della presente analisi è sufficiente osservare che…»
 
 **Pivot structure** (replace at least one linear A→B→C argument per page): Present a partial claim, introduce a complication that partially undermines it, then reach a revised or qualified conclusion. This is how real reasoning works.
 > ✗ Linear AI: «X causa Y. Y porta a Z. Quindi X porta a Z.»
@@ -624,14 +624,16 @@ Re-read these rule groups fresh before touching the chunk text:
 2. Apply all Layers 1–4 and Systemic Fixes
 3. Verify every factual claim against the source text
 
-**2d — Per-chunk quality check (fast, 6 items)**
+**2d — Per-chunk quality check (fast, 9 items)**
 - [ ] **[BLOCKING]** Zero em-dashes `—`: if any found, do not output — fix first, then continue
-- [ ] Zero blacklisted words
-- [ ] No forbidden sentence openers
-- [ ] Burstiness is functional (not mechanical alternation)
-- [ ] At least 1 dislocation or cleft
-- [ ] At least 1 asyndeton transition (punctuation-only)
-- [ ] Seam with previous chunk reads naturally
+- [ ] Zero algorithmic blacklist words (cruciale, fondamentale, sfaccettato, resiliente, intrinseco, vibrante…)
+- [ ] Zero calque uses (navigare, panorama, sbloccare, abbracciare, testamento, arazzo, regno in figurative sense)
+- [ ] No forbidden sentence openers (Tuttavia / Inoltre / Pertanto / Di conseguenza…)
+- [ ] No initial gerunds; no passive calques from English
+- [ ] Burstiness is functional (not mechanical alternation); pro-drop ≥80%
+- [ ] At least 1 dislocation or cleft sentence
+- [ ] At least 1 asyndeton transition (punctuation-only, no connective)
+- [ ] Seam with previous chunk reads naturally (no subject repetition, no register shift)
 
 **2e — Update Ledger & Pause (mandatory)**
 - Add any new core noun variants used
@@ -682,14 +684,21 @@ Before delivering output, verify:
 **Layer 1 — Core AI Fingerprints**
 1. **Factual accuracy** — spot-check 5 random facts against source
 2. **[BLOCKING] Em-dash count** — must be zero; if any `—` found, stop and fix before outputting
-3. **Blacklist scan** — zero occurrences of: cruciale, fondamentale, sfaccettato, resiliente, intrinseco, vibrante, esplorare, immergersi, svelare, plasmare, tessere
-4. **Forbidden openers** — no sentence starting with: Tuttavia / Inoltre / Peraltro / Pertanto / Di conseguenza / In conclusione / In sintesi / Detto ciò / In ultima analisi
-5. **Organic burstiness** — sentence length varies by rhetorical function, NOT by mechanical alternation; zero long-short-long-short loops; 2–4 consecutive similar-length sentences allowed when logic demands it; verify each short sentence has a functional reason (emphasis/conclusion/fact)
-6. **Pro-drop compliance** — no two consecutive sentences with same explicit subject
-7. **Dislocation count** — at least 2–3 dislocations or cleft sentences per page
-8. **Register consistency** — no colloquialisms or anglicisms (academic mode)
-9. **Structure completeness** — all source sections represented
-10. **Accents** — scan for bare `e`/`a`/`o`/`u`/`i` where accents are required; zero unaccented substitutions
+3. **Blacklist scan — algorithmic words** — zero occurrences of: cruciale, fondamentale, sfaccettato, resiliente, intrinseco, vibrante, esplorare, immergersi, svelare, plasmare, tessere
+4. **Blacklist scan — calques** — zero figurative uses of: navigare (difficoltà), panorama/paesaggio (abstract), sbloccare (potenziale), abbracciare (idee/cambiamenti), testamento (come prova), arazzo, regno (figurativo)
+5. **Forbidden openers** — no sentence starting with: Tuttavia / Inoltre / Peraltro / Pertanto / Di conseguenza / In conclusione / In sintesi / Detto ciò / In ultima analisi
+6. **Initial gerund ban** — zero sentences opening with a gerund (Essendo, Avendo, Trattandosi…); rewrite as subordinate clause
+7. **Active voice** — zero passive calques from English ("È creduto che…", "Viene considerato come…"); use *si* passivante instead
+8. **Anti-sandwich** — text does not open by restating what it is about; no moralizing "In conclusione è evidente che…" closing; jumps directly into substance
+9. **Toxic enthusiasm** — zero customer-care exclamations; zero time clichés («Nel mondo frenetico di oggi», «In un'epoca di rapidi cambiamenti»); zero unprompted historical premises
+10. **Organic burstiness** — sentence length varies by rhetorical function, NOT by mechanical alternation; zero long-short-long-short loops; 2–4 consecutive similar-length sentences allowed when logic demands it; verify each short sentence has a functional reason (emphasis/conclusion/fact)
+11. **Pro-drop compliance** — explicit subject omitted in ≥80% of sentences; never two consecutive sentences with the same explicit subject
+12. **Dislocation count** — at least 2–3 dislocations or cleft sentences per page
+13. **Register consistency** — no colloquialisms or anglicisms (academic mode)
+14. **Typography** — no Title Case in headings; no Oxford comma (no comma before final *e* in lists); guillemets «» used for all quotations; decimal separator is comma (3,8%); thousands separator is punto (1.000)
+15. **No bullet dumps** — all source bullet lists absorbed into flowing prose; no list items surviving as bare bullets in output
+16. **Structure completeness** — all source sections represented
+17. **Accents** — scan for bare `e`/`a`/`o`/`u`/`i` where accents are required; zero unaccented substitutions
 
 **Layer 2 — Advanced Fingerprints**
 11. **Asyndeton ratio** — at least 1 in 3 sentence transitions uses punctuation only (no explicit connective); count connectives per paragraph, cut if every transition has one
