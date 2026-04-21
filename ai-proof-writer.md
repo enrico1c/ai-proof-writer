@@ -210,17 +210,22 @@ if __name__ == "__main__":
 ```
 User provides text
        ↓
+Step 0: "local or web?" → sets MODE
+       ↓
 Phase 1: /italian-rewriting rules
   → Chunk 1 → 'Next' → Chunk 2 → 'Next' → ... → 'Assemble'
   → Final Italian text (all 30 gates passed)
        ↓
 Phase 2: /robotic-process-automation rules
-  → typing_sim.py generated with TARGET_TEXT = assembled text
+  → MODE=local: typing_sim.py (Python/pynput)
+  → MODE=web:   typing_sim.js (JavaScript console script)
        ↓
-User runs: python typing_sim.py
-  → Opens Word / Google Docs
-  → 10s countdown
-  → Text typed with human keystroke forensics
+MODE=local:                        MODE=web:
+  python typing_sim.py               Open Google Docs
+  → click in Word/Google Docs        → F12 → Console → paste script
+  → 10s countdown                    → click in document
+  → Text typed (pynput)              → 10s countdown
+                                     → Text typed (execCommand on iframe)
 ```
 
 ---
