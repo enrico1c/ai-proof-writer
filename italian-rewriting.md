@@ -8,6 +8,23 @@ level: 3
 
 Rewrite source material into fluent Italian prose that bypasses AI-detection tools (GPTZero, Originality, ZeroGPT). Preserves every fact, number, legal reference, and structural claim exactly — changes only the language surface. Targets academic register by default; supports saggistico and conversazionale on request.
 
+## ⛔ HARD CONSTRAINT — Em-dash Prohibition (pre-output blocking rule)
+
+**The character `—` (em-dash, U+2014) MUST NOT appear anywhere in the output. Ever. This is not a checklist item — it is a blocking constraint enforced before generating any text.**
+
+Before writing even a single sentence of output, scan the source chunk for every `—` and replace it using the substitution table below. If you detect a `—` in text you are about to output, stop and fix it first. No exceptions for quotations, titles, or code-adjacent text.
+
+| Source pattern | Replacement |
+|---|---|
+| `X — Y` (parenthetical) | `X, Y` or `X: Y` |
+| `X — Y — Z` (nested aside) | rephrase as subordinate clause |
+| `— item` (bullet marker) | standalone sentence, no marker |
+| `X —` (trailing) | `X,` or close the sentence |
+| `ovvero —` | `ovvero:` |
+| `cioè —` | `cioè:` |
+
+After substitution, clean punctuation artifacts: `, ,` → `,` · `: ,` → `:` · `,.` → `.` · `,;` → `;`
+
 ## When to Use
 
 Use this skill when:
@@ -602,13 +619,14 @@ Re-read these rule groups fresh before touching the chunk text:
 - Read the last sentence of the previous chunk → ensure the new chunk opens with natural continuity (no repetition of the closing subject, no jarring register shift)
 
 **2c — Rewrite the chunk**
+0. **[BLOCKING — before writing a single word]** Scan the source chunk for every `—`. Replace all instances now using the substitution table in the ⛔ HARD CONSTRAINT section above. Do not begin rewriting until zero `—` remain.
 1. Absorb all bullet points into flowing prose
-2. Eliminate em-dashes with substitution rules
-3. Apply all Layers 1–4 and Systemic Fixes
-4. Verify every factual claim against the source text
+2. Apply all Layers 1–4 and Systemic Fixes
+3. Verify every factual claim against the source text
 
 **2d — Per-chunk quality check (fast, 6 items)**
-- [ ] Zero em-dashes, zero blacklisted words
+- [ ] **[BLOCKING]** Zero em-dashes `—`: if any found, do not output — fix first, then continue
+- [ ] Zero blacklisted words
 - [ ] No forbidden sentence openers
 - [ ] Burstiness is functional (not mechanical alternation)
 - [ ] At least 1 dislocation or cleft
