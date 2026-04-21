@@ -97,19 +97,23 @@ Run the full 30-gate quality pass across all chunks, then output the final assem
 
 ## Phase 2 — Generate Typing Script (full `robotic-process-automation` skill)
 
-Immediately after delivering the assembled text, generate the complete Python typing script with `TARGET_TEXT` set to the assembled output. Output **only** the script — no preamble.
+Immediately after delivering the assembled text, generate the typing script with `TARGET_TEXT` set to the assembled output. Output **only** the script — no preamble.
+
+**Detect which script to generate:**
+- Default (local Claude Code, or user has Python): generate the **Python script** (`pynput`)
+- Web mode (claude.ai, or user says `--web` / has no local Python): generate the **JavaScript console script** (runs in Chrome DevTools on Google Docs — no installation)
 
 The script implements all 7 levels:
 
-| Level | Implementation |
-|---|---|
-| 1 | `pynput` Controller (Unicode-safe, Italian accents preserved) |
-| 2 | Per-character micro-rhythm: 0.04–0.12s standard, 0.10–0.20s for Shift chars |
-| 3 | Syntactic pauses: comma 0.3–0.8s · period/!/? 1.5–3.5s · newline 5–15s |
-| 4 | 1.5% typo injection with backspace + reaction time (0.3–0.6s) |
-| 5 | Cognitive pause every 400–600 chars for 10–25s |
-| 6 | 10s countdown + kill-switch instructions to terminal |
-| 7 | `TARGET_TEXT` hardcoded; `target_text.txt` fallback |
+| Level | Python (local) | JavaScript (web) |
+|---|---|---|
+| 1 | `pynput` Controller — Unicode-safe | `document.execCommand('insertText')` |
+| 2 | Per-character micro-rhythm: 0.04–0.12s | Same ranges via `setTimeout` |
+| 3 | Syntactic pauses: comma 0.3–0.8s · period 1.5–3.5s · newline 5–15s | Identical |
+| 4 | 1.5% typo injection with backspace + reaction time | Same: `execCommand('delete')` |
+| 5 | Cognitive pause every 400–600 chars for 10–25s | Identical |
+| 6 | 10s countdown + Ctrl+C kill-switch | 10s countdown — close DevTools to stop |
+| 7 | `TARGET_TEXT` hardcoded; `target_text.txt` fallback | `TARGET_TEXT` hardcoded in script |
 
 ```python
 #!/usr/bin/env python3

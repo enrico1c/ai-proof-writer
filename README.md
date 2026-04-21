@@ -120,15 +120,18 @@ Open Claude Code and run:
 Claude will:
 1. Split the text into chunks and rewrite each one interactively (type `Next` between chunks, `Assemble` after the last one)
 2. Deliver the final assembled Italian text
-3. Generate a ready-to-run Python typing script
+3. Generate the typing script — Python by default, or JavaScript if you add `--web`
 
-Save the script as `typing_sim.py`, open a blank Word document or Google Docs, then:
+**Local execution (Python):** save as `typing_sim.py`, open Word or Google Docs, then:
 ```bash
 python typing_sim.py
 ```
-Click inside the document during the 10-second countdown. The script types the text automatically.
+Click inside the document during the 10-second countdown.
 
-**Emergency stop:** `Ctrl+C` in the terminal, or move the mouse to any corner of the screen.
+**Web execution (JavaScript):** open Google Docs, press `F12` → Console tab, paste the script, click inside the document during the 10-second countdown.
+
+**Emergency stop (local):** `Ctrl+C` in the terminal, or move the mouse to any screen corner.
+**Emergency stop (web):** close the DevTools panel or navigate away.
 
 ---
 
@@ -174,23 +177,35 @@ Rewrites source material (PDF extract, raw text, docx content) into natural Ital
 
 ### `robotic-process-automation`
 
-Takes finalized text and generates a Python script that physically types it into any word processor, simulating human keystroke patterns at the forensic level.
+Takes finalized text and generates a typing script — **Python** (local) or **JavaScript** (web) — that physically types it into any word processor, simulating human keystroke patterns at the forensic level.
 
-**7 simulation levels:**
+**Two output modes:**
+| | Local (default) | Web (`--web` flag) |
+|---|---|---|
+| Script type | Python (`pynput`) | JavaScript (browser console) |
+| Target app | Word, Google Docs, any app | Google Docs only |
+| How to run | `python typing_sim.py` | F12 → Console tab → paste script |
+| Requires | Python 3.10 + pynput | Chrome or Firefox browser only |
+
+**7 simulation levels (identical in both modes):**
 | Level | What it does |
 |-------|-------------|
-| 1 | `pynput` keyboard controller — Unicode-safe, preserves Italian accents (è, à, ò) |
-| 2 | Per-character micro-rhythm: 0.04–0.12s standard, 0.10–0.20s for capitals/special chars |
+| 1 | Unicode-safe character insertion |
+| 2 | Per-character micro-rhythm: 0.04–0.12s standard, 0.10–0.20s for capitals |
 | 3 | Syntactic pauses: comma 0.3–0.8s · period/!/? 1.5–3.5s · newline 5–15s |
 | 4 | 1.5% typo injection with backspace + human reaction time (0.3–0.6s) |
 | 5 | Cognitive pause every 400–600 characters for 10–25s (simulates re-reading) |
-| 6 | 10-second countdown + kill-switch instructions before typing starts |
-| 7 | `TARGET_TEXT` hardcoded in script; optional `target_text.txt` file fallback |
+| 6 | 10-second countdown + kill-switch before typing starts |
+| 7 | `TARGET_TEXT` hardcoded in script |
 
-**Authorizations needed:**
+**Authorizations needed (local mode):**
 - Claude Code subscription (to generate the script)
 - `pynput` installed (`pip install pynput`)
 - Platform keyboard access permissions (see Platform permissions above)
+
+**Authorizations needed (web mode):**
+- Any Claude subscription (claude.ai is sufficient)
+- Chrome or Firefox browser — no extensions, no installation
 
 ---
 
@@ -198,10 +213,14 @@ Takes finalized text and generates a Python script that physically types it into
 
 Orchestrates both skills end-to-end. Invoke this when you want the full pipeline: rewritten Italian text + ready-to-run typing script in one session.
 
-**Authorizations needed:**
+**Authorizations needed (local):**
 - Claude Code subscription
 - `pynput` installed
 - Platform keyboard access permissions
+
+**Authorizations needed (web):**
+- Any Claude subscription (claude.ai is sufficient)
+- Chrome or Firefox browser
 
 ---
 

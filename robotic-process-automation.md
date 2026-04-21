@@ -70,10 +70,17 @@ Do **not** use when:
 
 ## Workflow
 
+**Local (Claude Code):** generates a Python script (`typing_sim.py`) run with `python typing_sim.py`.
+
+**Web (claude.ai):** generates a JavaScript browser console script run directly in Chrome DevTools on Google Docs — no Python, no installation.
+
+Detect which mode to use from context:
+- If the user has mentioned `--web`, is on claude.ai, or has said they have no local Python → generate the JS console script
+- Otherwise → generate the Python script (default)
+
 1. User invokes `/robotic-process-automation` and pastes the finalized text
-2. Generate the complete Python script with `TARGET_TEXT` set to that text
+2. Generate the appropriate script (Python or JS) with `TARGET_TEXT` set to that text
 3. Output **only** the script — no preamble, no explanation after
-4. Script is ready to run with `python script.py`
 
 ---
 
@@ -240,7 +247,114 @@ if __name__ == "__main__":
 
 ---
 
+## Web Mode — Browser Console Script (no Python required)
+
+When the user specifies `--web` or has no local Python, generate this JavaScript template instead of the Python one. All 7 simulation levels are preserved.
+
+**How it runs:** user opens Google Docs, presses `F12` → Console tab, pastes the script, clicks inside the document, waits 10 seconds.
+
+**Emergency stop:** close the DevTools panel or navigate away.
+
+```javascript
+// ai-proof-writer — Phase 2 (Web Mode)
+// Paste in Chrome DevTools Console while Google Docs is open and the document is focused.
+// Emergency stop: close DevTools or navigate away from the page.
+
+const TARGET_TEXT = `[ASSEMBLED REWRITTEN TEXT GOES HERE]`;
+
+// ── Level 4 ───────────────────────────────────────────────────────────────────
+const ERROR_RATE = 0.015;
+const COMMON_MISTYPE = 'asdfjklqwertyuiopzxcvbnm'.split('');
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+// ── Level 2 — Micro-rhythm ────────────────────────────────────────────────────
+function getCharDelay(char) {
+  if (char === char.toUpperCase() && char !== char.toLowerCase())
+    return 100 + Math.random() * 100;   // 0.10–0.20 s for capitals
+  return 40 + Math.random() * 80;        // 0.04–0.12 s standard
+}
+
+// ── Level 3 — Syntactic pauses ────────────────────────────────────────────────
+function getSyntacticPause(char) {
+  if (char === ',')          return 300  + Math.random() * 500;
+  if ('.?!'.includes(char))  return 1500 + Math.random() * 2000;
+  if (char === '\n')         return 5000 + Math.random() * 10000;
+  return 0;
+}
+
+// ── Level 1 — Insert character into Google Docs ───────────────────────────────
+function insertChar(char) {
+  if (char === '\n') {
+    document.execCommand('insertParagraph');
+  } else {
+    document.execCommand('insertText', false, char);
+  }
+}
+
+// ── Main ──────────────────────────────────────────────────────────────────────
+async function main() {
+  console.log('════════════════════════════════════════════════════');
+  console.log('  ai-proof-writer — Web Typing Simulator');
+  console.log('════════════════════════════════════════════════════');
+  console.log(`  Characters to type: ${TARGET_TEXT.length}`);
+  console.log('  Click inside the Google Docs document NOW.');
+  console.log('  Emergency stop: close DevTools or navigate away.');
+  console.log('════════════════════════════════════════════════════');
+
+  for (let i = 10; i > 0; i--) {
+    console.log(`  Starting in ${i}...`);
+    await sleep(1000);
+  }
+  console.log('  TYPING STARTED\n');
+
+  let charCount = 0;
+  let nextThreshold = 400 + Math.floor(Math.random() * 200);  // Level 5
+
+  for (const char of TARGET_TEXT) {
+
+    // Level 5 — Cognitive pause
+    if (charCount >= nextThreshold) {
+      const pause = 10000 + Math.random() * 15000;
+      console.log(`[COGNITIVE PAUSE] ${(pause / 1000).toFixed(1)}s`);
+      await sleep(pause);
+      charCount = 0;
+      nextThreshold = 400 + Math.floor(Math.random() * 200);
+    }
+
+    // Level 4 — Typo injection
+    if (/[a-zA-Z0-9]/.test(char) && Math.random() < ERROR_RATE) {
+      const wrong = COMMON_MISTYPE[Math.floor(Math.random() * COMMON_MISTYPE.length)];
+      insertChar(wrong);
+      await sleep(300 + Math.random() * 300);   // reaction time
+      document.execCommand('delete');
+      await sleep(100 + Math.random() * 200);   // correction pause
+    }
+
+    // Level 1 — Type the character
+    insertChar(char);
+    charCount++;
+
+    // Level 2 — Micro-rhythm delay
+    await sleep(getCharDelay(char));
+
+    // Level 3 — Syntactic pause
+    const syntactic = getSyntacticPause(char);
+    if (syntactic > 0) await sleep(syntactic);
+  }
+
+  console.log('\n[DONE] All text has been typed.');
+}
+
+main();
+```
+
+---
+
 ## Usage
+
+### Local (Claude Code)
 
 ```
 /robotic-process-automation
@@ -248,20 +362,28 @@ if __name__ == "__main__":
 [paste finalized text here]
 ```
 
-Optionally specify:
-- `--file` to instruct the script to read from `target_text.txt` instead of hardcoding
-- `--lang it` (default) — no effect on logic, documents intent for future locale-specific delay tuning
-
-### Dependencies
-
+Generates `typing_sim.py`. Run with:
 ```bash
 pip install pynput
-```
-
-### Execution
-
-```bash
 python typing_sim.py
 ```
 
-Click inside the target Word or Google Docs window during the 10-second countdown. The script takes over from there.
+Optional flags:
+- `--file` — read text from `target_text.txt` instead of hardcoding
+- `--lang it` (default)
+
+### Web (claude.ai or no local Python)
+
+```
+/robotic-process-automation --web
+
+[paste finalized text here]
+```
+
+Generates a JavaScript console script. To run it:
+1. Open **Google Docs** and place the cursor where typing should begin
+2. Press `F12` → go to the **Console** tab
+3. Paste the script and press `Enter`
+4. Click inside the document during the 10-second countdown
+
+No installation required beyond a Chrome or Firefox browser.
